@@ -2,7 +2,7 @@
 
 Docker container to automatically update DynHost records with your public IP address, for [OVH](https://www.ovh.com/world/domains/dns_management_service.xml) DNS.
 
-Forked from the excellent work from **<https://github.com/sylvanld/ovh-dynhost-client-docker>** but implemented multisubdomains support
+Forked from the excellent work from **<https://github.com/sylvanld/ovh-dynhost-client-docker>** but implemented multisubdomains support.
 
 ## Usage
 
