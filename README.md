@@ -17,7 +17,7 @@ version: "3"
 
 services:
   dynhost-updater:
-    image: alamparelli/ovh-dynhost-subdomains
+    image: ghcr.io/alamparelli/ovh-dynhost-subdomains:main
     environment:
       HOSTNAMES: "<host>.<domain>,<host>.<domain>,<host>.<domain>,...."
       IDENTIFIER: "<domain>-<suffix>"
@@ -35,7 +35,7 @@ metadata:
 spec:
   containers:
     - name: dynhost-updater
-      image: alamparelli/ovh-dynhost-subdomains
+      image: ghcr.io/alamparelli/ovh-dynhost-subdomains:main
       env:
         - name: HOSTNAMES: 
           value: "<host>.<domain>,<host>.<domain>,<host>.<domain>,...."
