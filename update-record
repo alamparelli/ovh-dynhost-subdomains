@@ -32,7 +32,7 @@ error(){ log error "$1"; }
 
 # validate inputs and set defaults
 
-[ -z $HOSTNAME ] && echo You need to set environment variable HOSTNAME && exit
+[ -z $HOSTNAMES ] && echo You need to set environment variable HOSTNAME && exit
 [ -z $IDENTIFIER ] && echo You need to set environment variable IDENTIFIER && exit
 [ -z $PASSWORD ] && echo You need to set environment variable PASSWORD && exit
 [ -z $LOG_LEVEL ] && LOG_LEVEL=debug
@@ -49,9 +49,12 @@ if [ "$CACHED_IP_ADDRESS" != "$PUBLIC_IP_ADDRESS" ]
 then
     info "Cached address changed from '$CACHED_IP_ADDRESS' to '$PUBLIC_IP_ADDRESS'"
     # update DynHost record using OVH API
-    ovh_response=$(curl -sS "http://www.ovh.com/nic/update?system=dyndns&hostname=${HOSTNAME}&myip=${PUBLIC_IP_ADDRESS}" \
-        -H "Authorization: Basic $(echo -n $IDENTIFIER:$PASSWORD | base64)")
-    debug "OVH response: ${ovh_response}"
+    for HOSTNAME in ${$HOSTNAMES//,/ }
+    do
+        ovh_response=$(curl -sS "http://www.ovh.com/nic/update?system=dyndns&hostname=${$HOSTNAME}&myip=${PUBLIC_IP_ADDRESS}" \
+            -H "Authorization: Basic $(echo -n $IDENTIFIER:$PASSWORD | base64)")
+        debug "OVH response: ${ovh_response}"
+    done
     # cache address for comparison, to avoid useless updates
     mkdir -p .cache/
     echo $PUBLIC_IP_ADDRESS > /dynhost/.cache/ip_address
