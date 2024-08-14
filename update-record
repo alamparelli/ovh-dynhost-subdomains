@@ -49,11 +49,9 @@ if [ "$CACHED_IP_ADDRESS" != "$PUBLIC_IP_ADDRESS" ]
 then
     info "Cached address changed from '$CACHED_IP_ADDRESS' to '$PUBLIC_IP_ADDRESS'"
     # update DynHost record using OVH API
-    for HOSTNAME in $(echo $HOSTNAMES | sed "s/,/ /g")
-    do
-    ovh_response=$(curl -sS "http://www.ovh.com/nic/update?system=dyndns&hostname=${$HOSTNAME}&myip=${PUBLIC_IP_ADDRESS}" \
-        -H "Authorization: Basic $(echo -n $IDENTIFIER:$PASSWORD | base64)")
-    debug "OVH response: ${ovh_response}"
+    for HOSTNAME in $(echo "$HOSTNAMES" | sed "s/,/ /g"); do
+        request=$(curl -m 5 -L --location-trusted --user "$IDENTIFIER:$PASSWORD" "https://www.ovh.com/nic/update?system=dyndns&hostname=$HOSTNAME&myip=$PUBLIC_IP_ADDRESS")
+        debug "IPv4 has changed - request to OVH DynHost: $request"
     done
     # cache address for comparison, to avoid useless updates
     mkdir -p .cache/
